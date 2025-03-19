@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Calculator</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #calculator {
+            border-radius: 10px;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        #display {
+            width: 97%;
+            padding: 3px;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            text-align: right;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        button {
+            padding: 15px;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            border: none;
+            background-color: #ddd;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #bbb;
+        }
+    </style>
+</head>
+<body>
+    <div id="calculator">
+        <input type="text" id="display" disabled>
+        <div class="buttons">
+            <button>7</button><button>8</button><button>9</button><button>/</button>
+            <button>4</button><button>5</button><button>6</button><button>*</button>
+            <button>1</button><button>2</button><button>3</button><button>-</button>
+            <button>0</button><button>.</button><button>=</button><button>+</button>
+            <button>√</button><button>%</button><button>MC</button><button>M+</button>
+            <button>MR</button><button>M-</button><button id="clear">C</button>
+        </div>
+    </div>
+
+    <script>
+        const display = document.getElementById('display');
+        const buttons = document.querySelectorAll('button');
+        let displayValue = '';
+        let memory = 0;
+
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                const value = button.textContent;
+
+                if (value === 'C') {
+                    displayValue = '';
+                    display.value = '';
+                } else if (value === '=') {
+                    try {
+                        display.value = eval(displayValue);
+                        displayValue = display.value;
+                    } catch (error) {
+                        display.value = 'Error';
+                    }
+                } else if (value === '√') {
+                    displayValue = Math.sqrt(eval(displayValue)).toString();
+                    display.value = displayValue;
+                } else if (value === '%') {
+                    displayValue = (eval(displayValue) / 100).toString();
+                    display.value = displayValue;
+                } else if (value === 'M+') {
+                    memory += parseFloat(display.value) || 0;
+                } else if (value === 'M-') {
+                    memory -= parseFloat(display.value) || 0;
+                } else if (value === 'MR') {
+                    displayValue = memory.toString();
+                    display.value = displayValue;
+                } else if (value === 'MC') {
+                    memory = 0;
+                } else {
+                    displayValue += value;
+                    display.value = displayValue;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
